@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pdfminer.high_level import extract_text_to_fp, extract_pages
-from pdfminer.layout import LAParams, LTTextContainer
+from pdfminer.layout import LAParams, LTTextContainer, LTTextBoxHorizontal, LTTextLine, LTTextBoxVertical
 from pdfminer.converter import XMLConverter
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfparser import PDFParser
@@ -65,10 +65,6 @@ def get_specific_pages(pdf_path_as_string, page_numbers=[0], maxpages=1):
     return pages
 
 
-def get_pdf_document():
-    pdf_document = ""
-
-
 
 resource_manager = PDFResourceManager(
     caching=False
@@ -90,16 +86,16 @@ with open(PATH_TO_PDF, 'rb') as fh:
     print(pdf_document)
 
     # ? -> PDFObjRef
-    document_pages = pdf_document.catalog['Pages']
-    resolved_objects = document_pages.resolve()
-    print("\n document_pages")
-    print(document_pages)
+    # document_pages = pdf_document.catalog['Pages']
+    # resolved_objects = document_pages.resolve()
+    # print("\n document_pages")
+    # print(document_pages)
 
-    print("\n resolved_objects")
-    print(resolved_objects)
-    for resolved_object in resolved_objects['Kids']:
-        print("\n resolve resolve")
-        print(resolved_object.resolve())
+    # print("\n resolved_objects")
+    # print(resolved_objects)
+    # for resolved_object in resolved_objects['Kids']:
+    #     print("\n resolve resolve")
+    #     print(resolved_object.resolve())
 
     
 
@@ -115,35 +111,88 @@ def get_document_properties(pdf_document):
     filtered_attributes = [attribute for attribute in document_properties if not(attribute[0].startswith('__') and attribute[0].endswith('__'))]
     return filtered_attributes
 
+# one of type in lttypes
+def get_element_type(element):
+    element_type = type(element)
+    # element_type.split('pdfminer.layout.') # maybe
+    return element_type
 
-
-
-document_properties = get_document_properties(pdf_document)
-print("\n document_properties")
-print(document_properties)
 
 
 pages_with_primes = get_specific_pages(PATH_TO_PDF, [8], 1)
+element_types = []
+text_elements = []
+
+
+
+# LTTextBoxHorizontal -> LTTextBox -> LTTextContainer -> LTExpandableContainer + LTText
+#                                        |
+#                                       get_text
+
+"""
+@name is_primes_section
+@description - a very flimsy (why? because in an ideal world there'd be a stronger relationship between the actual vertical slices
+of primes and isolating the headers and sidebars) means of accumulating the primes
+"""
+
+# maybe the more appropriate relationship is the positioning within the page since 
+# it seems like the bottom footer that is smaller does not quite get picked up
+
+# gross structure
+def is_primes_section(horizontal_textbox: LTTextBoxHorizontal) -> {bool, List}:
+    is_primes_section = {
+        is_primes_section: False,
+        primes: []
+    }
+    text_content_as_string = horizontal_textbox.get_text()
+    text_content = text_content.split('\n')
+    # a simple pass showed that the primes series had a trailing '' but the column names did not.
+    # like I said flimsy.
+    filtered_text_content = filter(lambda item: True if item else False, text_content)
+    if (len(filtered_text_content) == 100):
+        is_primes_section = {
+            is_primes_section: True,
+            primes = filtered_text_content
+        }
+    else:
+        is_primes_section = {
+            is_primes_section: False,
+            primes: []
+        }
+
+    return is_primes_section
+
+# kind of feels like I'm missing the point at the orientation/decode level
+# ')\n1\n1\n0\n2\n' => 2011
+# but I don't want to read too much into that right now since I'd be basing any generalization on literally a single section of a single page.
+
+primes = []
 try: 
     while True:
         # so this is really the page_layout
         page = next(pages_with_primes)
-        print('\n page inside of while')
+        print("\n what is page again?")
         print(page)
+        divisions_of_page = page.group
+        # really iterating over the table itself. 
         for element in page:
-            if isinstance(element, LTTextContainer):
-                print("\n element is of type text; element.get_text():")
-                text_container = element
-                print(element.get_text())
+            element_type = get_element_type(element)
+            element_types.append(element_type)
+            # very flimsy
+            is_primes_section = is_primes_section(element)
+            if (is_primes_section.is_primes_section):
+                # do prime logic
+                # there's a version of this somewhere that can kind of leverage the headers
+                # but the relationship is not obvious to me at this time. 
+                # (so like 547 gets truncated to 47, but only after 541 appears to make it clear the values have "rolled over")
+                primes.append(is_primes_section.primes) 
+            # it is bothering me that it using the term "horizontal"
+            # when it is correctly slicing "vertically"
+                
 except StopIteration:
     print("StopIteration reached")
 finally:
     print("Finally block")
 
-
-# try:
-#     page_with_prime = next(pages_with_primes)
-
-
-# print("output_string:\n")
-# print(output_string)
+print("\n primes: \n")
+print(primes)
