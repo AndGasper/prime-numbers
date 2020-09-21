@@ -264,3 +264,22 @@ So it pulls it out in vertical slices.
 303
 2
 ```
+
+```
+# default
+                # line_overlap=0.5, -> If two characters have more overlap than this they are considered to be on the same line. The overlap is specified relative to the minimum height of both characters.
+                # char_margin = 2.0, -> If two characters are closer together than this margin they are considered part of the same line. The margin is specified relative to the width of the character.
+                # line_margin = 0.5, -> If two lines are are close together they are considered to be part of the same paragraph. The margin is specified relative to the height of a line.
+                # word_margin = 0.1 -> If two characters on the same line are further apart than this margin then they are considered to be two separate words, and an intermediate space will be added for readability. The margin is specified relative to the width of the character.
+                # boxes_flow=0.5, -> -1.0 only horizontal position matters to +1.0 only vertical position matters
+                # detect_vertical=False,
+                # all_texts=False
+                horizontal_textbox_layout_params = LAParams(
+                    line_overlap=10,
+                    char_margin=0.5,
+                    line_margin=0.5,
+                    boxes_flow=None, # disable advanced layout analysis
+                    detect_vertical=True,
+                    all_texts=False
+                )
+```
