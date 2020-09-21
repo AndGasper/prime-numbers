@@ -11,5 +11,7 @@ setuptools.setup(
     description="Sample 'package' to make fixture primes rather than calculate them.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url=
+    url="https://github.com/AndGasper/prime-numbers",
+    packages=setup.find_packages(),
+    python_required=">3.7"
 )
