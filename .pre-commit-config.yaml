@@ -1,6 +1,7 @@
 repos:
   - repo: local
     hooks:
+    # linting
       - id: pylint
         name: pylint
         entry: pylint
@@ -8,4 +9,10 @@ repos:
         types: [python]
         args: [src/main.py, --rcfile=.pylintrc]
 
-    
+      # dependency change checker
+      - id: check-for-dependency-changes
+        name: check-for-dependency-changes
+        entry: python
+        language: system
+        types: [python]
+        args: [./pre-commit-hooks/check-for-dependency-changes/check_for_dependency_changes.py]

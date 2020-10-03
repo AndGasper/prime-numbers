@@ -1,3 +1,15 @@
+# dependency management
+# maybe not necessary
+- id: check-for-dependency-changes
+  name: check-for-dependency-changes
+  # todo?: non-relative path
+  entry: pre-commit-hooks/check_for_dependency_changes
+  language: python
+  types: [python]
+  description: 'Prevent depedency change logic from being mixed in with code change logic'
+  stages: [commit]
+
+# linting
 - id: pylint
   name: pylint
   entry: pylint
