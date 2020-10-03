@@ -283,3 +283,105 @@ So it pulls it out in vertical slices.
                     all_texts=False
                 )
 ```
+
+
+
+```
+# LTTextBoxHorizontal -> LTTextBox -> LTTextContainer -> LTExpandableContainer + LTText
+#                                        |
+#                                       get_text
+```
+
+
+
+
+------
+
+# Fixtures 
+- minimal_pdf_file.pdf
+    - taken from PDF32000_2008_specification.pdf file H.2
+
+
+<table>
+    <thead>
+        <th>Object Number</th>
+        <th>Object type</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td>Catalog (document catalog)</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Outlines (outline dictionary)</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Pages (page tree node)</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Page (page object)</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Content stream</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>Procedure set array</td>
+    </tr>
+    </tbody>
+</table>
+
+
+## 14.2 Procedure Sets -> this is where the danger comes in
+<table>
+    <thead>
+        <th>Name</th>
+        <th>Category of operators</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Name</td>
+            <td>Painting and graphics state</td>
+        </tr>
+        <tr>
+            <td>Text</td>
+            <td>Text</td>
+        </tr>
+        <tr>
+            <td>ImageB</td>
+            <td>GrayScale images or image masks</td>
+        </tr>
+        <tr>
+            <td>ImageC</td>
+            <td>Colour images</td>
+        </tr>
+        <tr>
+            <td>ImageI</td>
+            <td>Indexed (colour-table) images</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+## Workflow
+    - Implement
+        - pre-commit (local)
+        - pipeline itself should commit and ultimately tag
+        - Optimize the diff'ing/fsmonitor query for handling dependency monitoring
+
+## Git diff
+- Possibly `#TODO implement custom fsmonitor to accomodate diff's in Pipfile.lock`
+
+
+
+
+# pre-commit hooks generate_requirements.py
+- Purpose: separate changes to underlying dependencies from changes to codes
+    - Why?: Think about automated vulnerability checks. One can decouple the "uh, what's this?" from "uh, what's this feature do?"
+
+- Real purpose: I didn't want to forget to chedck if I actually had the dependencies listed somewhere.
