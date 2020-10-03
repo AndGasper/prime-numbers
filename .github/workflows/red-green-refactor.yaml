@@ -5,12 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Prepare Repo
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          - python-version: '3.8'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip insstall flake8 pytest
+          python-version: '3.8'
+      - name: Display Python version (sanity check for the uses x 2)
+        run: python -c "from sys import version; print('Version: {version}'.format(version=version))"
 
