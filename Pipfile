@@ -9,6 +9,9 @@ pre-commit = "*"
 
 [packages]
 pdfminer-six = "*"
+flake8 = "*"
+pytest = "*"
+pre-commit-hooks = "*"
 
 [requires]
 python_version = "3.7"

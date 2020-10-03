@@ -1,0 +1,27 @@
+-i https://pypi.org/simple
+atomicwrites==1.4.0 ; sys_platform == 'win32'
+attrs==20.2.0
+cffi==1.14.3
+chardet==3.0.4 ; python_version > '3.0'
+colorama==0.4.3 ; sys_platform == 'win32'
+cryptography==3.1.1
+flake8==3.8.4
+importlib-metadata==2.0.0 ; python_version < '3.8'
+iniconfig==1.0.1
+mccabe==0.6.1
+packaging==20.4
+pdfminer-six==20200726
+pluggy==0.13.1
+pre-commit-hooks==3.2.0
+py==1.9.0
+pycodestyle==2.6.0
+pycparser==2.20
+pyflakes==2.2.0
+pyparsing==2.4.7
+pytest==6.1.0
+ruamel.yaml.clib==0.2.2 ; platform_python_implementation == 'CPython' and python_version < '3.9'
+ruamel.yaml==0.16.12
+six==1.15.0
+sortedcontainers==2.2.2
+toml==0.10.1
+zipp==3.2.0
