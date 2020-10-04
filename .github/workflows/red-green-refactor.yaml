@@ -6,10 +6,10 @@ jobs:
     steps:
       - name: Prepare Repo
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
       - name: Display Python version (sanity check for the uses x 2)
+      - uses: actions/setup-python@v2
         # run: python -c "from sys import version; print('Version: {version}'.format(version=version))"
         run: python -c "import sys; print(sys.version)"
 
