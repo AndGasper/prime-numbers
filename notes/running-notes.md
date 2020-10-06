@@ -483,6 +483,8 @@ In this scheme, it is easy to run your tests using the --pyargs option:
 pytest --pyargs mypkg
 pytest will discover where mypkg is installed and collect tests from there.
 ```
+pytest execute
+- `pytest --pyargs primenumbers`
 
 # virtual environment setup because I always forget and have to double look
 0. which python
@@ -492,3 +494,99 @@ pytest will discover where mypkg is installed and collect tests from there.
     - run the activation script
 3. pipenv install .
     - use pipenv to install the dependencies
+
+
+
+LTTextLineHorizozntal
+|
+LTChar +  LTAnno + LTAnno
+
+```
+table_cell_header_row_la_params = LAParams(
+    line_overlap=2,
+    char_margin=2,
+    line_margin=0.1,
+    word_margin=0.01,
+    boxes_flow=0 # vertical and horizontal position
+)
+```
+^ Memory error lol
+boxes_flow is horizontal and vertical positioning
+
+
+```
+exception MemoryError
+Raised when an operation runs out of memory but the situation may still be rescued (by deleting some objects). The associated value is a string indicating what kind of (internal) operation ran out of memory. Note that because of the underlying memory management architecture (C’s malloc() function), the interpreter may not always be able to completely recover from this situation; it nevertheless raises an exception so that a stack traceback can be printed, in case a run-away program was the cause
+```
+
+
+fixture_table_header_row = ["\n", "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","2","3","3","3","3","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49", "50" ]
+
+
+
+"""
+
+"""
+
+```
+self.page = get_page() # a miracle occurs with handling the file path and such and knowing which page to get
+```
+
+
+`class PageWithTable extends LTPage` might be more appropriate
+since the core logic of what defines this particular Page is more about an item (a table) on the page.
+
+class Page:
+    def __init__(self):
+
+
+"""
+Some class...
+"""
+def test_get_table_header_row(self):
+    table_header_row = self.page["table"]["header"]
+    self.assertEqual(
+        table_header_row,
+        fixture_table_header_row,
+        "Mismatch in the table header row."
+    )
+
+
+test_get_table = ["\n", "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","2","3","3","3","3","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49", "50" ]
+
+## [traceback - Print or retrieve a stack traceback](https://docs.python.org/3/library/traceback.html)
+
+
+
+```
+try:
+    while True:
+        # thing that throws conditional
+except MemoryError:
+    print("Oh no! MemoryError.")
+    from traceback import print_exc
+    from sys import stdout
+    # print the exception to standard out.
+    print_exc(
+        file=stdout
+    )
+```
+```
+Oh no! MemoryError.
+Traceback (most recent call last):
+  File "prime-numbers/src/main.py", line 186, in <module>
+    page = next(pages_with_primes)
+  File "pdfminer/high_level.py", line 149, in extract_pages
+    interpreter.process_page(page)
+  File "pdfminer/pdfinterp.py", line 897, in process_page
+    self.device.end_page(page)
+  File "pdfminer/converter.py", line 52, in end_page
+    self.cur_item.analyze(self.laparams)
+  File "pdfminer/layout.py", line 811, in analyze
+    self.groups = self.group_textboxes(laparams, textboxes)
+  File "pdfminer/layout.py", line 758, in group_textboxes
+    obj1, obj2))
+MemoryError
+ ```
+
+ Ah, so it's up and dying when it has to do math. Kind of.
