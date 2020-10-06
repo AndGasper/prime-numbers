@@ -483,3 +483,12 @@ In this scheme, it is easy to run your tests using the --pyargs option:
 pytest --pyargs mypkg
 pytest will discover where mypkg is installed and collect tests from there.
 ```
+
+# virtual environment setup because I always forget and have to double look
+0. which python
+1. virtualenv -p ${USE THE OUTPUT FROM STEP 0} venv
+    - create virtual environment using the specified python executable
+2. source ./venv/Scripts/activate
+    - run the activation script
+3. pipenv install .
+    - use pipenv to install the dependencies
