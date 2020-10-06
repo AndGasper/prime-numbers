@@ -12,6 +12,8 @@ pdfminer-six = "*"
 flake8 = "*"
 pytest = "*"
 pre-commit-hooks = "*"
+prime-numbers = {path = "."}
+primenumbers = {path = "."}
 
 [requires]
 python_version = "3.7"
