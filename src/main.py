@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pdfminer.high_level import extract_text_to_fp, extract_pages
-from pdfminer.layout import LAParams, LTTextContainer, LTTextBoxHorizontal, LTTextLine, LTTextBoxVertical
+from pdfminer.layout import LAParams, LTTextContainer, LTTextBoxHorizontal, LTTextLine, LTTextBoxVertical, LTChar
 from pdfminer.converter import XMLConverter
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfparser import PDFParser
@@ -24,18 +24,18 @@ else:
 @param {int} maxpages - maximum number of pages to parse; default of 1 page
 @return {LTPage}
 """
-def get_specific_pages(pdf_path_as_string, page_numbers=[0], maxpages=1):
+def get_specific_pages(pdf_path_as_string, page_numbers=[0], max_pages=1):
     pages = extract_pages(
         PATH_TO_PDF,
         page_numbers=page_numbers,
-        maxpages=1
+        maxpages=max_pages
     )
     return pages
 
-# returns a generator
-def get_specific_pages_without_interpreting(file_handle, password, page_numbers=[0]: List{int}, laparams: LAParams):
+# # returns a generator
+# def get_specific_pages_without_interpreting(file_handle, password, page_numbers: List[int]=[0], laparams: LAParams):
     
-    yield uninterpreted_page
+#     yield uninterpreted_page
 
 
 resource_manager = PDFResourceManager(
@@ -51,11 +51,11 @@ device = XMLConverter(
 
 )
 # seems wasteful
-with open(PATH_TO_PDF, 'rb') as fh:
-    parser = PDFParser(fh)
-    pdf_document = PDFDocument(parser)
-    print("\n pdf_document")
-    print(pdf_document)
+# with open(PATH_TO_PDF, 'rb') as fh:
+#     parser = PDFParser(fh)
+#     pdf_document = PDFDocument(parser)
+#     print("\n pdf_document")
+#     print(pdf_document)
 
 # do not decode the 
 
@@ -135,42 +135,92 @@ def is_primes_section(horizontal_textbox: LTTextBoxHorizontal) -> {bool, list}:
 primes = []
 # tuning the horizontal textbox layout
 horizontal_textbox_layout_params = LAParams(
-    line_overlap=10,
-    char_margin=10,
-    line_margin=0.5,
-    boxes_flow=None,
-    all_texts=False
+    line_overlap=0.1,
+    char_margin=0.2,
+    line_margin=1,
+    word_margin=0.1,
+    boxes_flow=0.5
 )
+# 58.748 - y1
+# 536.136 - y2
+KNOWN_Y1_COORDINATE = 58.748
+KNOWN_Y2_COORDINATE = 536.136
+# if isinstance(element, LTTextBoxHorizontal):
+#     element_bounding_box = element.bbox
+#     if ()
+
+# # 161.327,542.988,163.258,546.933
+# KNOWN_START_OF_TABLE_COORDINATES = {
+#     x1: 161.327,
+#     x2: 1
+# }
+
+"""
+"1 - 48 583 \n" title
+{
+    x0:427.49863,
+    x1:465.4567273915,
+    y0:559.4267198580001,
+    y1:567.606462858,
+}
+"""
+"""
+')\n1\n1\n0\n2\n'
+{
+    x0: 105.925, 
+    y0: 443.960, 
+    x1: 117.880, 
+    y1: 471.907
+}
+"""
+"""
+{
+    x0: 161.327,
+    y0: 542.988,
+    x1: 163.258,
+    y1: 546.933
+}
+"""
+table_coordinates = {
+    "x0": 160,
+    "y0": 546,
+    "x1": 840,
+    "y1": 595
+}
+
+def is_sequential(list_of_values: list):
+    is_sequential = False
+    return is_sequential
+
+# very crude logic for identifying the headers
+SIZE_OF_HEADER_CELLS = {
+    # "height": 3.9452159999999594
+    # "width": 1.931183231999995 # sincerely doubt the precision
+    "height": 3.9,
+    "width": 1.4
+}
+# something, something euler's method or newton's method for approximating error 
+# would probably be relevant if I were elegant.
 try: 
     while True:
-        # so this is really the page_layout
+        # LTPage
         page = next(pages_with_primes)
         # really iterating over the table itself. 
         for element in page:
-            element_type = get_element_type(element)
-            element_types.append(element_type)
-            if isinstance(element, LTTextBoxHorizontal):
-                pre_analysis_text = element.get_text()
-                print('\n pre_analysis_text:')
-                print(pre_analysis_text)
-            # very flimsy
-            if isinstance(element, LTTextBoxHorizontal):
-                # analyze first and then let's see what happens
-                # The .analyze method returns None, but seems to mutate internal properties of the 
-                element.analyze(horizontal_textbox_layout_params)
-                post_analysis_text = element.get_text()
-                print('\n post_analysis_text:')
-                print(post_analysis_text)
-            is_primes_section = is_primes_section(element)
-            if (is_primes_section.is_primes_section):
-                # do prime logic
-                # there's a version of this somewhere that can kind of leverage the headers
-                # but the relationship is not obvious to me at this time. 
-                # (so like 547 gets truncated to 47, but only after 541 appears to make it clear the values have "rolled over")
-                primes.append(is_primes_section.primes) 
-            # it is bothering me that it using the term "horizontal"
-            # when it is correctly slicing "vertically"
-                
+            # x0, y0, x1, y1
+            element_position = element.bbox
+            # had to manually get the rough coordinates
+            if element.x0 > table_coordinates["x0"]:
+                if isinstance(element, LTTextBoxHorizontal):
+                    element_text = element.get_text()
+                    print("element_text\n")
+                    print(element_text)
+                    if element_text == '1\n':
+                        print("first element of the header row")
+                        print(element_text)
+                    # if element_text == '50\n':
+                    #     print("end of the header row")
+                    #     print(element_text)
 except StopIteration:
     print("StopIteration reached")
 finally:

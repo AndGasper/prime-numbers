@@ -7,7 +7,7 @@ def readme():
 
 
 setup(
-    name="prime-numbers-sisyphus",
+    name="primenumbers",
     version="0.0.1",
     author="King of Ephyra",
     description="Sample 'package' to make fixture primes rather than calculate them.",
