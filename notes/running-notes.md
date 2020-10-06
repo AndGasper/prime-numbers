@@ -385,3 +385,101 @@ So it pulls it out in vertical slices.
     - Why?: Think about automated vulnerability checks. One can decouple the "uh, what's this?" from "uh, what's this feature do?"
 
 - Real purpose: I didn't want to forget to chedck if I actually had the dependencies listed somewhere.
+
+
+
+- really a terrible way of doing it by page because it has to load the entire document to figure out where page 9 is
+
+
+LTTextBoxHorizontal -> LTTextLineHorizontal
+
+
+- Interesting
+So whatever way I have it now,
+it's going:
+1,2,3,4,5,6,7,8,9,10,11,12,13 
+then breaking into 
+so like the second column
+541\n
+
+
+
+```
+
++-----------------------+
+|           TITLE
+| V       ACTUAL TABLE
+| E
+| R
+| T
+| I
+| C
+| A
+| L
+| H
+| E
+| A
+| D
+| E
+| R
++------------------------+
+```
+
+
+describe("Page getting", function() {
+    it should:
+        return a Page with 3 groups
+})
+
+
+
+## Tests setup
+- I was tearing my hair out about the layout analysis
+    - So I'm just going to take a step back and try to get three groups
+- [Based the testing structure on pytest good practices](https://docs.pytest.org/en/stable/goodpractices.html)
+
+
+This is problematic if you are using a tool like tox to test your package in a virtual environment, because you want to test the installed version of your package, not the local code from the repository.
+
+In this situation, it is strongly suggested to use a src layout where application root package resides in a sub-directory of your root:
+```
+setup.py
+src/
+    mypkg/
+        __init__.py
+        app.py
+        view.py
+tests/
+    __init__.py
+    foo/
+        __init__.py
+        test_view.py
+    bar/
+        __init__.py
+        test_view.py
+```
+
+
+
+>  `rootdir` is NOT used to modify sys.path/PYTHONPATH or influence how modules are imported. See pytest import mechanisms and sys.path/PYTHONPATH for more details.
+
+
+```
+Tests as part of application code
+Inlining test directories into your application package is useful if you have direct relation between tests and application modules and want to distribute them along with your application:
+
+setup.py
+mypkg/
+    __init__.py
+    app.py
+    view.py
+    test/
+        __init__.py
+        test_app.py
+        test_view.py
+        ...
+In this scheme, it is easy to run your tests using the --pyargs option:
+
+pytest --pyargs mypkg
+pytest will discover where mypkg is installed and collect tests from there.
+```
