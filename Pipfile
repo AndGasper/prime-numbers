@@ -6,14 +6,14 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 pre-commit = "*"
+pre-commit-hooks = "*"
+pytest = "*"
+flake8 = "*"
 
 [packages]
 pdfminer-six = "*"
-flake8 = "*"
-pytest = "*"
-pre-commit-hooks = "*"
-prime-numbers = {path = "."}
 primenumbers = {path = "."}
+pre-commit = "*"
 
 [requires]
 python_version = "3.7"
